@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/reg.css' %}">
 {% endblock %}
 
 {% block navbar %}{% endblock %}
@@ -16,11 +16,20 @@
 -->
 <div class="auth-container {% if mode == 'register' %}sign-up-mode{% endif %}">
 
+    <!-- Logo Top Left -->
+    <a class="auth-brand top-left-brand" href="/">
+        <i class="fa-solid fa-paw"></i> PetLynk
+    </a>
+    <!-- Logo Top Right (for Sign Up mode) -->
+    <a class="auth-brand top-right-brand" href="/">
+        <i class="fa-solid fa-paw"></i> PetLynk
+    </a>
+
     <div class="forms-container">
         <div class="signin-signup">
 
             <!-- Login Form -->
-            <form action="{% url 'login' %}" method="POST" class="sign-in-form">
+            <form action="{% url 'user_login' %}" method="POST" class="sign-in-form">
                 {% csrf_token %}
                 <h2 class="title">Sign in</h2>
 
@@ -77,14 +86,11 @@
         <div class="panel left-panel">
             <div class="content">
                 <h3>New here?</h3>
-                <p>Join our community of pet lovers today!</p>
+                <p>Join the community of animals</p>
                 <button class="btn transparent" id="sign-up-btn">
                     Sign up
                 </button>
             </div>
-            <!-- Animated Image Placeholder -->
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/pet-care-illustration-download-in-svg-png-gif-file-formats--dog-animal-cat-love-veterinary-clinic-pack-healthcare-medical-illustrations-4546416.png"
-                class="image" alt="" />
         </div>
 
         <!-- Right Panel (Visible during Register) -->
@@ -96,9 +102,6 @@
                     Sign in
                 </button>
             </div>
-            <!-- Animated Image Placeholder -->
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/cat-playing-illustration-download-in-svg-png-gif-file-formats--yarn-ball-kitten-animal-activity-pack-nature-illustrations-4546424.png"
-                class="image" alt="" />
         </div>
 
     </div>
@@ -120,7 +123,15 @@
     // Customize input fields from Django form to match design
     // Since Django renders <input> directly, we might need to remove default classes or style them
     document.querySelectorAll('.sign-up-form input').forEach(input => {
-        input.placeholder = input.name.charAt(0).toUpperCase() + input.name.slice(1);
+        let placeholderText = "";
+        const name = input.name.toLowerCase();
+
+        if (name.includes('username')) placeholderText = "Username (e.g. Fluffy)";
+        else if (name.includes('email')) placeholderText = "Email (e.g. pet@love.com)";
+        else if (name.includes('password')) placeholderText = "Password";
+        else placeholderText = input.name.charAt(0).toUpperCase() + input.name.slice(1);
+
+        input.placeholder = placeholderText;
         input.style.background = 'transparent';
         input.style.border = 'none';
         input.style.width = '100%';

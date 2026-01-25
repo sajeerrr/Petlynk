@@ -1,30 +1,130 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <div class="card p-4">
-            <h3 class="text-center mb-4">Create Profile</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card p-4 border-0 shadow-lg" style="border-radius: 30px;">
+                <h3 class="text-center mb-4 text-primary-gradient fw-bold">Create Profile</h3>
 
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+                <form method="post" enctype="multipart/form-data" class="profile-form">
+                    {% csrf_token %}
 
-                {% for field in form %}
-                <div class="mb-3">
-                    <label class="form-label">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}
-                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                    <!-- Errors Block -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger shadow-sm rounded-4 p-3 mb-4">
+                        <h6 class="fw-bold mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Please Check:</h6>
+                        <ul class="mb-0 ps-3">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     {% endif %}
-                </div>
-                {% endfor %}
 
-                <button class="btn btn-primary-custom w-100 mt-3">
-                    Save Profile <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </form>
+                    <!-- 1. Circular Avatar Uploader -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="profile-pic-wrapper" onclick="document.getElementById('id_image').click()">
+                            <img id="avatar-preview"
+                                src="https://img.freepik.com/premium-vector/cute-dog-cat-friend-cartoon_138676-2432.jpg"
+                                alt="Avatar">
+                            <div class="edit-overlay"
+                                onclick="document.getElementById('id_image').click(); event.stopPropagation();">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Actual File Input (Hidden) -->
+                    {{ form.image }}
+
+                    <!-- 2. Main Info -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase text-muted">My Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Species</label>
+                            {{ form.species }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Age</label>
+                            {{ form.age }}
+                        </div>
+                    </div>
+
+                    <!-- 3. Choice Chips (Gender, Energy, Social, Bonding) -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">I am a...</label>
+                        <div class="chip-group">
+                            {% for radio in form.gender %}
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Energy Level</label>
+                        <div class="chip-group">
+                            {% for radio in form.energy_level %}
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Social Style</label>
+                        <div class="chip-group">
+                            {% for radio in form.social_style %}
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Bonding Speed</label>
+                        <div class="chip-group">
+                            {% for radio in form.bonding_style %}
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Active During</label>
+                        <div class="chip-group">
+                            {% for radio in form.activity_cycle %}
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Hidden Fields (Defaults) -->
+                    {{ form.habitat }}
+                    {{ form.territory }}
+                    {{ form.personality }}
+                    {{ form.diet }}
+                    {{ form.preference }}
+                    {{ form.favorite_activity }}
+
+                    <button class="btn btn-primary-custom w-100 mt-3 py-3 fs-5 shadow-sm">
+                        Find Matches <i class="fa-solid fa-heart ms-2"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    <script src="{% static 'js/profile.js' %}"></script>
+    {% endblock %}

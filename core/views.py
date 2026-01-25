@@ -20,11 +20,11 @@ def login_view(request):
         else:
             return render(
                 request,
-                "auth.html",
+                "reg.html",
                 {"error": "Invalid username or password", "mode": "login", "form": RegisterForm()}
             )
 
-    return render(request, "auth.html", {"mode": "login", "form": RegisterForm()})
+    return render(request, "reg.html", {"mode": "login", "form": RegisterForm()})
 
 
 def register(request):
@@ -38,11 +38,11 @@ def register(request):
             return redirect('create_profile')
         else:
              # Stay in register mode on error
-            return render(request, 'auth.html', {'form': form, 'mode': 'register'})
+            return render(request, 'reg.html', {'form': form, 'mode': 'register'})
     else:
         form = RegisterForm()
 
-    return render(request, 'auth.html', {'form': form, 'mode': 'register'})
+    return render(request, 'reg.html', {'form': form, 'mode': 'register'})
 
 
 @login_required
@@ -67,8 +67,13 @@ def create_profile(request):
 
 
 @login_required
+@login_required
 def dashboard(request):
-    profile = AnimalProfile.objects.get(user=request.user)
+    try:
+        profile = AnimalProfile.objects.get(user=request.user)
+    except AnimalProfile.DoesNotExist:
+        return redirect('create_profile')
+
     matches = get_matches(profile)
 
     if request.method == "POST":

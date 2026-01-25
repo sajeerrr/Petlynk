@@ -30,6 +30,69 @@ body {
     left: 0;
 }
 
+.auth-brand {
+    position: absolute;
+    top: 30px;
+    font-size: 26px;
+    font-weight: 800;
+    text-decoration: none;
+    z-index: 100;
+    /* Strictly on top */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.9s 0.6s ease-in-out;
+}
+
+.auth-brand i {
+    color: #fff;
+}
+
+.top-left-brand {
+    left: 40px;
+    color: #fff !important;
+    background: none !important;
+    -webkit-text-fill-color: #fff !important;
+    z-index: 100;
+}
+
+.top-left-brand i {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+.top-right-brand {
+    right: 40px;
+    color: #fff !important;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.top-right-brand i {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+/* When in Sign-Up Mode */
+.auth-container.sign-up-mode .top-left-brand {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.auth-container.sign-up-mode .top-right-brand {
+    opacity: 1;
+    pointer-events: all;
+    color: #fff !important;
+    background: none !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+.auth-container.sign-up-mode .top-right-brand i {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
 .signin-signup {
     position: absolute;
     top: 50%;
@@ -75,11 +138,26 @@ form.sign-up-form {
     background-color: #f0f0f0;
     margin: 10px 0;
     height: 55px;
-    border-radius: 55px;
+    border-radius: 50px;
     display: grid;
     grid-template-columns: 15% 85%;
     padding: 0 0.4rem;
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-field:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 75, 31, 0.15);
+    background-color: #fff8f6;
+    /* Light tint of primary color */
+}
+
+.input-field:focus-within {
+    box-shadow: 0 4px 15px rgba(255, 75, 31, 0.25);
+    border: 1px solid #ff4b1f;
+    background-color: #fff;
+    /* Pure white on focus for clarity */
 }
 
 .input-field i {
@@ -90,6 +168,10 @@ form.sign-up-form {
     font-size: 1.1rem;
 }
 
+.input-field:focus-within i {
+    color: #ff4b1f;
+}
+
 .input-field input {
     background: none;
     outline: none;
@@ -98,6 +180,15 @@ form.sign-up-form {
     font-weight: 600;
     font-size: 1.1rem;
     color: #333;
+}
+
+/* Fix Chrome Autofill Background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #333 !important;
 }
 
 .input-field input::placeholder {
@@ -122,57 +213,96 @@ form.sign-up-form {
 .panel {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-around;
+    align-items: center;
+    /* Center horizontally */
+    justify-content: center;
+    /* Center vertically */
     text-align: center;
     z-index: 6;
+    padding: 0 10%;
+    /* Standard side padding */
 }
 
 .left-panel {
     pointer-events: all;
-    padding: 3rem 17% 2rem 12%;
 }
 
 .right-panel {
     pointer-events: none;
-    padding: 3rem 12% 2rem 17%;
 }
 
 .content {
-    color: #fff;
+    color: #fff !important;
+    /* Force white for all content in panels */
     transition: transform 0.9s ease-in-out;
     transition-delay: 0.6s;
     z-index: 7;
 }
 
 .panel h3 {
-    font-weight: 600;
+    font-weight: 800;
+    /* Extra bold */
     line-height: 1;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    /* Slightly larger */
+    color: #fff;
+    /* Explicitly white */
 }
 
 .panel p {
-    font-size: 0.95rem;
+    font-weight: 600;
+    /* Bolder text */
+    font-size: 1.1rem;
+    /* Slightly larger */
     padding: 0.7rem 0;
+    color: #fff;
+    /* Explicitly white */
 }
 
 .btn.transparent {
     margin: 0;
     background: none;
     border: 2px solid #fff;
-    width: 130px;
-    height: 41px;
-    font-weight: 600;
-    font-size: 0.8rem;
+    width: 180px;
+    /* Wider */
+    height: 50px;
+    /* Taller */
+    font-weight: 700;
+    font-size: 1rem;
+    /* Larger font */
     border-radius: 50px;
     color: #fff;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn.transparent:hover {
+    background-color: #fff;
+    color: #ffaf7b;
+    /* New light orange color */
 }
 
 .image {
     width: 100%;
     transition: transform 1.1s ease-in-out;
     transition-delay: 0.4s;
+    animation: floating 3.5s ease-in-out infinite;
+    opacity: 0.9;
+    /* Slight blend with background */
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
 }
 
 .right-panel .image,
@@ -238,8 +368,27 @@ form.sign-up-form {
     top: -10%;
     right: 48%;
     transform: translateY(-50%);
-    background-image: var(--primary-gradient);
+    /* Dual Pet Reveal (Left and Right) */
+    background-image:
+        url('../img/pets_group.png'),
+        url('../img/pets_right.png'),
+        var(--primary-gradient);
+    background-repeat: no-repeat;
+    background-position:
+        left 5% bottom 20%,
+        right 10% bottom 20%,
+        center;
+    background-size:
+        700px auto,
+        600px auto,
+        cover;
+    background-attachment:
+        fixed,
+        fixed,
+        scroll;
+    background-blend-mode: multiply;
     transition: 1.8s ease-in-out;
     border-radius: 50%;
     z-index: 6;
+    /* Stays behind .content (z: 7) */
 }

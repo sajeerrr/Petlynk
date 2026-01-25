@@ -46,7 +46,23 @@ def get_matches(profile):
     for animal in animals:
         score = calculate_match_score(profile, animal)
         explanation = explain_match(profile, animal)
-        results.append((animal, score, explanation))
+        
+        # Structure for template
+        match_data = {
+            "id": animal.id,
+            "name": animal.name,
+            "species": animal.species,
+            "gender": animal.gender,
+            "age": animal.age,
+            "image": animal.image,
+            "score": score,
+            "explanation": explanation,
+            "favorite_activity": animal.favorite_activity,
+            "energy_level": animal.energy_level,
+            "social_style": animal.social_style,
+            "bonding_style": animal.bonding_style,
+        }
+        results.append(match_data)
 
-    results.sort(key=lambda x: x[1], reverse=True)
+    results.sort(key=lambda x: x['score'], reverse=True)
     return results
