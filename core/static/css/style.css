@@ -1,0 +1,171 @@
+/* ================================
+   PetLynk Premium Theme
+   Font: 'Outfit', sans-serif
+================================ */
+
+:root {
+    /* Premium Color Palette - Sunset Love */
+    --primary-gradient: linear-gradient(135deg, #ff4b1f 0%, #ff9068 100%);
+    --secondary-gradient: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
+    --bg-color: #fff0f5;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --glass-shadow: 0 8px 32px 0 rgba(255, 75, 31, 0.15);
+    --border-radius: 24px;
+    --nav-height: 80px;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff4b1f' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+    overflow-x: hidden;
+}
+
+/* ================================
+   Typography
+================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+}
+
+p {
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/* ================================
+   Navbar
+================================ */
+
+.navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    height: var(--nav-height);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    padding: 0;
+}
+
+.navbar-brand {
+    font-size: 26px;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-brand i {
+    -webkit-text-fill-color: #FF6B6B;
+    /* Fallback for icon */
+}
+
+.nav-link-custom {
+    color: var(--text-main);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
+
+.nav-link-custom:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: #FF6B6B;
+}
+
+.btn-primary-custom {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    color: white;
+}
+
+/* ================================
+   Layout
+================================ */
+
+.main-wrapper {
+    padding: 40px 0;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--glass-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ================================
+   Forms
+================================ */
+
+.form-control {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #eaecf0;
+    border-radius: 12px;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #FF8E53;
+    box-shadow: 0 0 0 4px rgba(255, 142, 83, 0.1);
+}
+
+form label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Match Cards moved to dashboard.css */
+
+/* ================================
+   Footer
+================================ */
+
+footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 14px;
+}

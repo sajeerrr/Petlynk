@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register | PetLynk</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+    <div class="card auth-card">
+
+        <h3>Create Account 🐾</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <p style="text-align:center;margin-top:15px;">
+            Already have account?
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

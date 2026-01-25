@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h2 class="mb-2">Your Matches 🐾</h2>
+    <p class="text-muted">Find your perfect companion today</p>
+</div>
+
+<div class="row g-4">
+    {% for animal in matches %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card match-card">
+            <div class="match-img-wrapper">
+                {% if animal.image %}
+                <img src="{{ animal.image.url }}" class="match-img" alt="{{ animal.name }}">
+                {% else %}
+                <img src="https://placekitten.com/400/300" class="match-img" alt="Placeholder">
+                {% endif %}
+                <div class="match-badge">
+                    {{ animal.score }}% Match
+                </div>
+            </div>
+
+            <div class="match-content">
+                <div class="match-title">
+                    {{ animal.name }}
+                    <small style="font-size: 14px; font-weight: normal; color: #777;">
+                        {{ animal.age }} yrs
+                    </small>
+                </div>
+
+                <div class="match-meta">
+                    <i class="fa-solid fa-paw"></i> {{ animal.species }} &bull; {{ animal.gender }}
+                </div>
+
+                <div class="match-tags">
+                    <span class="tag">{{ animal.energy_level }} Energy</span>
+                    <span class="tag">{{ animal.social_style }}</span>
+                    <span class="tag">{{ animal.bonding_style }} Bond</span>
+                </div>
+
+                <div class="mt-auto">
+                    <p class="small text-muted mb-3">
+                        <i class="fa-regular fa-star"></i> {{ animal.favorite_activity }}
+                    </p>
+
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="target" value="{{ animal.id }}">
+                        <button class="action-btn btn-bond">
+                            <i class="fa-solid fa-heart"></i> Bond with {{ animal.name }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="card p-5">
+            <h3>No matches found yet 😿</h3>
+            <p>Try updating your preference settings!</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
