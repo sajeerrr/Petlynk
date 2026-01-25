@@ -1,0 +1,78 @@
+.reset-container {
+    min-height: calc(100vh - var(--nav-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.reset-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.reset-card h2 {
+    color: #444;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.reset-card p {
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.input-field {
+    margin: 15px auto !important;
+}
+
+.btn-primary-custom {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+}
+
+/* Ensure Logo is centered */
+.reset-card .auth-brand {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 25px;
+    font-size: 2rem !important;
+    color: #ff4b1f !important;
+    background: none !important;
+}
+
+.reset-card .auth-brand i {
+    color: #ff4b1f !important;
+}
+
+/* Base card alignment */
+.reset-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.reset-card .input-field {
+    margin: 15px auto !important;
+}
+
+.reset-card .input-field input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+}

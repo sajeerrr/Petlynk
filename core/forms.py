@@ -4,11 +4,44 @@ from .models import AnimalProfile
 
 
 class RegisterForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Email'})
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("No user found with this email.")
+        return email
+
+
+class SetNewPasswordForm(forms.Form):
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'New Password'}),
+        label="New Password"
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm New Password'}),
+        label="Confirm New Password"
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("new_password")
+        confirm = cleaned_data.get("confirm_password")
+
+        if password and confirm and password != confirm:
+            raise forms.ValidationError("Passwords do not match.")
+        return cleaned_data
 
 
 
@@ -18,7 +51,6 @@ class AnimalProfileForm(forms.ModelForm):
         exclude = ['user']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Luna'}),
-            'species': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Wolf'}),
             'gender': forms.RadioSelect(attrs={'class': 'btn-check'}),
             'age': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 4'}),
             'energy_level': forms.RadioSelect(attrs={'class': 'btn-check'}),
@@ -27,35 +59,100 @@ class AnimalProfileForm(forms.ModelForm):
             'preference': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Strong companion'}),
         }
     
-    # Explicitly defining image to make it required (model has it as optional)
-    image = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'd-none', 'id': 'id_image', 'onchange': 'previewImage(this)'}))
-
-    # Add extra choices for free-text fields to allow "Chip" selection
-    ACTIVITY_CHOICES = [('Day', 'Day'), ('Night', 'Night'), ('Any', 'Any')]
-    activity_cycle = forms.ChoiceField(choices=ACTIVITY_CHOICES, widget=forms.RadioSelect(attrs={'class': 'btn-check'}))
+    species = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Wolf'}),
+        required=True,
+        error_messages={'required': 'Please provide a species.'}
+    )
     
-    # Hide others or give defaults? Let's keep them hidden/default for now to simplify
-    # We will handle these defaults in the view if not present, or just render them hidden with JS defaults
-    habitat = forms.CharField(widget=forms.HiddenInput(), initial="Unknown")
-    territory = forms.CharField(widget=forms.HiddenInput(), initial="Unknown")
-    personality = forms.CharField(widget=forms.HiddenInput(), initial="Friendly")
-    diet = forms.CharField(widget=forms.HiddenInput(), initial="Omnivore")
-    preference = forms.CharField(widget=forms.HiddenInput(), initial="To be loved")
-    favorite_activity = forms.CharField(widget=forms.HiddenInput(), initial="Being cute")
+    # Explicitly defining image to make it required
+    image = forms.ImageField(
+        required=True, 
+        error_messages={'required': 'Please upload a beautiful photo of your pet! 📸🐾'},
+        widget=forms.FileInput(attrs={'class': 'd-none', 'id': 'id_image', 'onchange': 'previewImage(this)'})
+    )
+
+    # Choice-based fields for Chips
+    activity_cycle = forms.ChoiceField(
+        choices=[('Day', 'Day'), ('Night', 'Night'), ('Any', 'Any')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Active During"
+    )
+    
+    favorite_activity = forms.ChoiceField(
+        choices=[
+            ('Chasing Lasers', 'Chasing Lasers'), ('Playing Fetch', 'Playing Fetch'),
+            ('Sunbathing', 'Sunbathing'), ('Bird Watching', 'Bird Watching'),
+            ('Belly Rubs', 'Belly Rubs'), ('Other', 'Other')
+        ],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Favorite Activity"
+    )
+
+    habitat = forms.ChoiceField(
+        choices=[('Forest', 'Forest'), ('Jungle', 'Jungle'), ('Desert', 'Desert'), ('Ocean', 'Ocean'), ('Urban', 'Urban'), ('Other', 'Other')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Favorite Habitat"
+    )
+
+    territory = forms.ChoiceField(
+        choices=[('Mountains', 'Mountains'), ('River', 'River'), ('Garden', 'Garden'), ('House', 'House'), ('Cave', 'Cave'), ('Other', 'Other')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Home Territory"
+    )
+
+    personality = forms.ChoiceField(
+        choices=[('Playful', 'Playful'), ('Loyal', 'Loyal'), ('Protective', 'Protective'), ('Calm', 'Calm'), ('Mischievous', 'Mischievous'), ('Other', 'Other')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Personality"
+    )
+
+    diet = forms.ChoiceField(
+        choices=[('Carnivore', 'Carnivore'), ('Herbivore', 'Herbivore'), ('Omnivore', 'Omnivore'), ('Insectivore', 'Insectivore'), ('Other', 'Other')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Diet Style"
+    )
+
+    preference = forms.ChoiceField(
+        choices=[('Strong Companion', 'Strong Companion'), ('Playful Friend', 'Playful Friend'), ('Gentle Soul', 'Gentle Soul'), ('Adventurer', 'Adventurer'), ('Cuddle Buddy', 'Cuddle Buddy'), ('Other', 'Other')],
+        widget=forms.RadioSelect(attrs={'class': 'btn-check'}),
+        required=True,
+        label="Match Preference"
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Remove empty choices ("---------") from RadioSelect fields
-        for field_name in ['gender', 'energy_level', 'social_style', 'bonding_style', 'activity_cycle']:
+        
+        # Standardize required messages (preserving custom image message)
+        for field_name, field in self.fields.items():
+            if field.required and field_name != 'image':
+                label = field.label.lower() if field.label else field_name.replace('_', ' ')
+                field.error_messages['required'] = f"Please provide a {label}."
+
+        chip_fields = [
+            'gender', 'energy_level', 'social_style', 'bonding_style', 
+            'activity_cycle', 'favorite_activity', 'habitat', 
+            'territory', 'personality', 'diet', 'preference'
+        ]
+        for field_name in chip_fields:
             if field_name in self.fields:
                 self.fields[field_name].choices = [
                     c for c in self.fields[field_name].choices if c[0] != ''
                 ]
 
     def clean_species(self):
-        data = self.cleaned_data['species']
-        # Normalize to Title Case to match model choices (e.g. "wolf" -> "Wolf")
-        return data.title()
+        data = self.cleaned_data['species'].strip().title()
+        valid_species = [choice[0] for choice in AnimalProfile.SPECIES_CHOICES]
+        
+        if data not in valid_species:
+            raise forms.ValidationError(f"'{data}' is not a supported species yet. Try one of our partners! 🐾")
+        return data
 
     def clean_gender(self):
         data = self.cleaned_data['gender']

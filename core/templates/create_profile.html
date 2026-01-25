@@ -1,130 +1,215 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/create_profile.css' %}">
+{% endblock %}
+
 {% block content %}
-
 <div class="row justify-content-center">
-    <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
-            <div class="card p-4 border-0 shadow-lg" style="border-radius: 30px;">
-                <h3 class="text-center mb-4 text-primary-gradient fw-bold">Create Profile</h3>
+    <div class="col-md-10 col-lg-8">
+        <div class="card p-4 border-0 shadow-lg" style="border-radius: 30px;">
+            <h3 class="text-center mb-4 text-primary-gradient fw-bold">{% if is_edit %}Edit Profile{% else %}Create
+                Profile{% endif %}</h3>
 
-                <form method="post" enctype="multipart/form-data" class="profile-form">
-                    {% csrf_token %}
+            <form method="post" enctype="multipart/form-data" class="profile-form" novalidate>
+                {% csrf_token %}
 
-                    <!-- Errors Block -->
-                    {% if form.errors %}
-                    <div class="alert alert-danger shadow-sm rounded-4 p-3 mb-4">
-                        <h6 class="fw-bold mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Please Check:</h6>
-                        <ul class="mb-0 ps-3">
-                            {% for field in form %}
-                            {% for error in field.errors %}
-                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
-                            {% endfor %}
-                            {% endfor %}
-                            {% for error in form.non_field_errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
+                {% if form.errors %}
+                <div class="alert alert-danger shadow-sm rounded-4 p-3 mb-4">
+                    <h6 class="fw-bold mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Please Check:</h6>
+                    <ul class="mb-0 ps-3">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
 
-                    <!-- 1. Circular Avatar Uploader -->
-                    <div class="d-flex justify-content-center mb-4">
-                        <div class="profile-pic-wrapper" onclick="document.getElementById('id_image').click()">
-                            <img id="avatar-preview"
-                                src="https://img.freepik.com/premium-vector/cute-dog-cat-friend-cartoon_138676-2432.jpg"
-                                alt="Avatar">
-                            <div class="edit-overlay"
-                                onclick="document.getElementById('id_image').click(); event.stopPropagation();">
-                                <i class="fa-solid fa-pencil"></i>
-                            </div>
+                <!-- 1. Circular Avatar -->
+                <div class="d-flex justify-content-center mb-4">
+                    <div class="profile-pic-wrapper" onclick="document.getElementById('id_image').click()">
+                        <img id="avatar-preview"
+                            src="https://img.freepik.com/premium-vector/cute-dog-cat-friend-cartoon_138676-2432.jpg"
+                            alt="Avatar">
+                        <div class="edit-overlay"
+                            onclick="document.getElementById('id_image').click(); event.stopPropagation();">
+                            <i class="fa-solid fa-pencil"></i>
                         </div>
                     </div>
-                    <!-- Actual File Input (Hidden) -->
-                    {{ form.image }}
+                </div>
+                {{ form.image }}
 
-                    <!-- 2. Main Info -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-12">
-                            <label class="form-label fw-bold small text-uppercase text-muted">My Name</label>
-                            {{ form.name }}
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Species</label>
-                            {{ form.species }}
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Age</label>
-                            {{ form.age }}
-                        </div>
+                <!-- 2. Main Info -->
+                <div class="row g-3 mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-bold small text-uppercase text-muted">My Name</label>
+                        {{ form.name }}
                     </div>
-
-                    <!-- 3. Choice Chips (Gender, Energy, Social, Bonding) -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">I am a...</label>
-                        <div class="chip-group">
-                            {% for radio in form.gender %}
-                            {{ radio.tag }}
-                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
-                            {% endfor %}
-                        </div>
+                    <div class="col-6">
+                        <label class="form-label fw-bold small text-uppercase text-muted">Species</label>
+                        {{ form.species }}
                     </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Energy Level</label>
-                        <div class="chip-group">
-                            {% for radio in form.energy_level %}
-                            {{ radio.tag }}
-                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
-                            {% endfor %}
-                        </div>
+                    <div class="col-6">
+                        <label class="form-label fw-bold small text-uppercase text-muted">Age</label>
+                        {{ form.age }}
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Social Style</label>
-                        <div class="chip-group">
-                            {% for radio in form.social_style %}
-                            {{ radio.tag }}
-                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
-                            {% endfor %}
-                        </div>
+                <!-- 3. Core Identity Chips -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">I am a...</label>
+                    <div class="chip-group">
+                        {% for choice in form.gender %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Bonding Speed</label>
-                        <div class="chip-group">
-                            {% for radio in form.bonding_style %}
-                            {{ radio.tag }}
-                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
-                            {% endfor %}
-                        </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Energy Level</label>
+                    <div class="chip-group">
+                        {% for choice in form.energy_level %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Active During</label>
-                        <div class="chip-group">
-                            {% for radio in form.activity_cycle %}
-                            {{ radio.tag }}
-                            <label for="{{ radio.id_for_label }}" class="chip">{{ radio.choice_label }}</label>
-                            {% endfor %}
-                        </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Social Style</label>
+                    <div class="chip-group">
+                        {% for choice in form.social_style %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
                     </div>
+                </div>
 
-                    <!-- Hidden Fields (Defaults) -->
-                    {{ form.habitat }}
-                    {{ form.territory }}
-                    {{ form.personality }}
-                    {{ form.diet }}
-                    {{ form.preference }}
-                    {{ form.favorite_activity }}
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Bonding Speed</label>
+                    <div class="chip-group">
+                        {% for choice in form.bonding_style %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
 
-                    <button class="btn btn-primary-custom w-100 mt-3 py-3 fs-5 shadow-sm">
-                        Find Matches <i class="fa-solid fa-heart ms-2"></i>
-                    </button>
-                </form>
-            </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Active During</label>
+                    <div class="chip-group">
+                        {% for choice in form.activity_cycle %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr class="my-5 opacity-10">
+                <h5 class="mb-4 fw-bold" style="color: #ff4b1f;">Lifestyle & Matching 🐾</h5>
+
+                <!-- Habitat Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Favorite Habitat</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.habitat %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-habitat-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-habitat-input" class="form-control"
+                            placeholder="Describe your habitat...">
+                    </div>
+                </div>
+
+                <!-- Territory Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Home Territory</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.territory %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-territory-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-territory-input" class="form-control"
+                            placeholder="Describe your territory...">
+                    </div>
+                </div>
+
+                <!-- Personality Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Personality</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.personality %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-personality-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-personality-input" class="form-control"
+                            placeholder="Describe yourself...">
+                    </div>
+                </div>
+
+                <!-- Diet Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Diet Style</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.diet %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-diet-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-diet-input" class="form-control"
+                            placeholder="Special diet needs?">
+                    </div>
+                </div>
+
+                <!-- Favorite Activity Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Favorite Activity</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.favorite_activity %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-favorite_activity-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-favorite_activity-input" class="form-control"
+                            placeholder="Tell us your special activity...">
+                    </div>
+                </div>
+
+                <!-- Preference Section -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">What I Look For</label>
+                    <div class="chip-group mb-2">
+                        {% for choice in form.preference %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    <div id="other-preference-container" class="mt-2" style="display: none;">
+                        <input type="text" id="custom-preference-input" class="form-control"
+                            placeholder="Describe your perfect match...">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 mt-5 py-3 fs-5 shadow-sm">
+                    {% if is_edit %}Save Changes{% else %}Find My Perfect Match{% endif %} <i
+                        class="fa-solid fa-heart ms-2"></i>
+                </button>
+            </form>
         </div>
     </div>
+</div>
 
-    <script src="{% static 'js/profile.js' %}"></script>
-    {% endblock %}
+<script src="{% static 'js/create_profile.js' %}"></script>
+{% endblock %}

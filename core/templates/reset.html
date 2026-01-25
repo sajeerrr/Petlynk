@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reg.css' %}">
+<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block layout %}
+<div class="reset-container">
+    <div class="reset-card">
+        <a class="auth-brand" href="/">
+            <i class="fa-solid fa-paw"></i> PetLynk
+        </a>
+        {% if step == 1 %}
+        <h2>Account Help 🐾</h2>
+        <p>Enter your email address and we'll help you get back in!</p>
+        <form method="POST" novalidate class="profile-form">
+            {% csrf_token %}
+            <div class="input-field">
+                <i class="fas fa-envelope"></i>
+                {{ form.email }}
+            </div>
+            {% if form.email.errors %}
+            <small class="text-danger d-block mb-3">{{ form.email.errors.0 }}</small>
+            {% endif %}
+            <button type="submit" class="btn btn-primary-custom">
+                Continue <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+            <div class="mt-4">
+                <a href="{% url 'user_login' %}" style="color: #ff4b1f; text-decoration: none; font-weight: 600;">Back
+                    to Login</a>
+            </div>
+        </form>
+        {% else %}
+        <h2>New Password 🔑</h2>
+        <p>Perfect! Now set a strong new password for <strong>{{ reset_user.username }}</strong>.</p>
+        <form method="POST" novalidate class="profile-form">
+            {% csrf_token %}
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                {{ form.new_password }}
+            </div>
+            <div class="input-field">
+                <i class="fas fa-shield-alt"></i>
+                {{ form.confirm_password }}
+            </div>
+
+            {% if form.non_field_errors %}
+            <small class="text-danger d-block mb-3">{{ form.non_field_errors.0 }}</small>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary-custom">
+                Reset Password <i class="fas fa-check ms-2"></i>
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

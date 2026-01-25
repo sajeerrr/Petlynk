@@ -29,7 +29,7 @@
         <div class="signin-signup">
 
             <!-- Login Form -->
-            <form action="{% url 'user_login' %}" method="POST" class="sign-in-form">
+            <form action="{% url 'user_login' %}" method="POST" class="sign-in-form" novalidate>
                 {% csrf_token %}
                 <h2 class="title">Sign in</h2>
 
@@ -47,13 +47,14 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="Password" required />
                 </div>
-                <button type="submit" class="btn btn-primary-custom" style="width: 150px; margin-top: 20px;">
+                <a href="{% url 'forgot_password' %}" class="forgot-pass">Forgot password?</a>
+                <button type="submit" class="btn btn-primary-custom" style="width: 150px; margin-top: 10px;">
                     Login
                 </button>
             </form>
 
             <!-- Register Form -->
-            <form action="{% url 'register' %}" method="POST" class="sign-up-form">
+            <form action="{% url 'register' %}" method="POST" class="sign-up-form" novalidate>
                 {% csrf_token %}
                 <h2 class="title">Sign up</h2>
 
@@ -107,36 +108,7 @@
     </div>
 </div>
 
-<script>
-    const sign_in_btn = document.querySelector("#sign-in-btn");
-    const sign_up_btn = document.querySelector("#sign-up-btn");
-    const container = document.querySelector(".auth-container");
-
-    sign_up_btn.addEventListener("click", () => {
-        container.classList.add("sign-up-mode");
-    });
-
-    sign_in_btn.addEventListener("click", () => {
-        container.classList.remove("sign-up-mode");
-    });
-
-    // Customize input fields from Django form to match design
-    // Since Django renders <input> directly, we might need to remove default classes or style them
-    document.querySelectorAll('.sign-up-form input').forEach(input => {
-        let placeholderText = "";
-        const name = input.name.toLowerCase();
-
-        if (name.includes('username')) placeholderText = "Username (e.g. Fluffy)";
-        else if (name.includes('email')) placeholderText = "Email (e.g. pet@love.com)";
-        else if (name.includes('password')) placeholderText = "Password";
-        else placeholderText = input.name.charAt(0).toUpperCase() + input.name.slice(1);
-
-        input.placeholder = placeholderText;
-        input.style.background = 'transparent';
-        input.style.border = 'none';
-        input.style.width = '100%';
-    });
-</script>
+<script src="{% static 'js/reg.js' %}"></script>
 
 <style>
     /* Quick fixes for Django form rendering inside custom input-field */

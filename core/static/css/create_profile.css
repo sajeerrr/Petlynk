@@ -1,0 +1,128 @@
+/* ================================
+   Quick CSS Refactor: Profile Creation
+   Specifically for create_profile.html
+   ================================ */
+
+/* Profile Uploader & Chips */
+.profile-pic-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: #eee;
+    transition: transform 0.3s ease;
+    margin: 0 auto;
+}
+
+.profile-pic-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.profile-pic-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.edit-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.9rem;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Hide actual radio buttons */
+.chip-group input[type="radio"] {
+    display: none;
+}
+
+/* Chip Style */
+.chip {
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: #fff;
+    border: 2px solid #eaecf0;
+    color: var(--text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.chip:hover {
+    border-color: #ffd1b3;
+    transform: translateY(-2px);
+}
+
+/* Selected State */
+.chip-group input[type="radio"]:checked+.chip {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 10px rgba(255, 75, 31, 0.3);
+}
+
+/* Professional Validation Components */
+.error-state {
+    border-color: #ff4b1f !important;
+    box-shadow: 0 0 10px rgba(255, 75, 31, 0.2) !important;
+}
+
+/* Container-level error (for Chips & Avatar) */
+.mb-4.error-state .chip {
+    border-color: #ff4b1f !important;
+}
+
+.profile-pic-wrapper.error-state {
+    border-color: #ff4b1f !important;
+    box-shadow: 0 0 15px rgba(255, 75, 31, 0.4) !important;
+}
+
+.error-state i {
+    color: #ff4b1f !important;
+}
+
+.shake {
+    animation: shake-input 0.4s ease-in-out;
+}
+
+@keyframes shake-input {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    50% {
+        transform: translateX(8px);
+    }
+
+    75% {
+        transform: translateX(-4px);
+    }
+}

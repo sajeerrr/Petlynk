@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .forms import RegisterForm, AnimalProfileForm
 from .models import AnimalProfile
 from .matching import get_matches
@@ -65,6 +66,24 @@ def create_profile(request):
     return render(request, 'create_profile.html', {'form': form})
 
 
+@login_required
+def edit_profile(request):
+    try:
+        profile = AnimalProfile.objects.get(user=request.user)
+    except AnimalProfile.DoesNotExist:
+        return redirect('create_profile')
+
+    if request.method == 'POST':
+        form = AnimalProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = AnimalProfileForm(instance=profile)
+
+    return render(request, 'create_profile.html', {'form': form, 'is_edit': True})
+
+
 
 @login_required
 @login_required
@@ -99,5 +118,39 @@ def dashboard(request):
         "matches": matches,
         "mutuals": mutuals
     })
+
+
+def forgot_password(request):
+    from .forms import ForgotPasswordForm
+    if request.method == "POST":
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email__iexact=email)
+            # Redirect to the reset page with the username as a simple identifier
+            # (In production, use a secure token)
+            return redirect('reset_password', username=user.username)
+    else:
+        form = ForgotPasswordForm()
+    
+    return render(request, "reset.html", {"form": form, "step": 1})
+
+
+def reset_password(request, username):
+    from .forms import SetNewPasswordForm
+    user = User.objects.get(username=username)
+    
+    if request.method == "POST":
+        form = SetNewPasswordForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            user.set_password(new_password)
+            user.save()
+            return redirect('user_login')
+    else:
+        form = SetNewPasswordForm()
+    
+    return render(request, "reset.html", {"form": form, "step": 2, "reset_user": user})
+
 
 

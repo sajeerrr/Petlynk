@@ -4,23 +4,21 @@
 ================================ */
 
 :root {
-    /* Premium Color Palette - Softer Peach Sunset */
-    --primary-gradient: linear-gradient(135deg, #ffaf7b 0%, #ff9c8a 100%);
+    /* Premium Color Palette - Sunset Love */
+    --primary-gradient: linear-gradient(135deg, #ff4b1f 0%, #ff9068 100%);
     --secondary-gradient: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
-    --bg-color: #fffaf8;
-    /* Slightly warmer white */
+    --bg-color: #fff0f5;
     --card-bg: rgba(255, 255, 255, 0.95);
     --text-main: #2d3436;
     --text-muted: #636e72;
-    --glass-shadow: 0 8px 32px 0 rgba(255, 175, 123, 0.1);
-    /* Lighter shadow */
+    --glass-shadow: 0 8px 32px 0 rgba(255, 75, 31, 0.15);
     --border-radius: 24px;
     --nav-height: 80px;
 }
 
 body {
     background-color: var(--bg-color);
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffaf7b' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff4b1f' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     font-family: 'Outfit', sans-serif;
     color: var(--text-main);
     min-height: 100vh;
@@ -152,8 +150,8 @@ p {
 }
 
 .form-control:focus {
-    border-color: #ffaf7b;
-    box-shadow: 0 4px 15px rgba(255, 175, 123, 0.2);
+    border-color: #FF8E53;
+    box-shadow: 0 4px 15px rgba(255, 142, 83, 0.2);
     transform: translateY(-2px);
 }
 
@@ -179,95 +177,11 @@ input:-webkit-autofill:active {
 
 /* ================================
    Footer
-================================ */
+   ================================ */
 
 footer {
     text-align: center;
     padding: 40px;
     color: var(--text-muted);
     font-size: 14px;
-}
-
-/* ================================
-   Profile Uploader & Chips
-================================ */
-
-.profile-pic-wrapper {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    position: relative;
-    cursor: pointer;
-    border: 4px solid #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    background: #eee;
-    transition: transform 0.3s ease;
-    margin: 0 auto;
-    /* Center it */
-}
-
-.profile-pic-wrapper:hover {
-    transform: scale(1.05);
-}
-
-.profile-pic-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.edit-overlay {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    width: 35px;
-    height: 35px;
-    background: var(--primary-gradient);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 0.9rem;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-}
-
-.chip-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-/* Hide actual radio buttons */
-.chip-group input[type="radio"] {
-    display: none;
-}
-
-/* Chip Style */
-.chip {
-    padding: 10px 20px;
-    border-radius: 50px;
-    background: #fff;
-    border: 2px solid #eaecf0;
-    color: var(--text-muted);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    user-select: none;
-}
-
-.chip:hover {
-    border-color: #ffd1b3;
-    transform: translateY(-2px);
-}
-
-/* Selected State */
-.chip-group input[type="radio"]:checked+.chip {
-    background: var(--primary-gradient);
-    color: #fff;
-    border-color: transparent;
-    box-shadow: 0 4px 10px rgba(255, 75, 31, 0.3);
 }

@@ -38,6 +38,9 @@
         <a href="{% url 'dashboard' %}" class="nav-link-custom">
           <i class="fa-solid fa-heart"></i> Matches
         </a>
+        <a href="{% url 'edit_profile' %}" class="nav-link-custom">
+          <i class="fa-solid fa-circle-user"></i> Profile
+        </a>
         <form action="{% url 'logout' %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button type="submit" class="btn btn-primary-custom">Logout</button>

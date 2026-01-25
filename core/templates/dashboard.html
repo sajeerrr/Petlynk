@@ -18,9 +18,11 @@
         <div class="card match-card">
             <div class="match-img-wrapper">
                 {% if animal.image %}
-                <img src="{{ animal.image.url }}" class="match-img" alt="{{ animal.name }}">
+                <img src="{{ animal.image.url }}" class="match-img" alt="{{ animal.name }}"
+                    onerror="this.src='https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=500&q=70';">
                 {% else %}
-                <img src="https://placekitten.com/400/300" class="match-img" alt="Placeholder">
+                <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=500&q=70" class="match-img"
+                    alt="Branded Placeholder">
                 {% endif %}
                 <div class="match-badge">
                     {{ animal.score }}% Match
