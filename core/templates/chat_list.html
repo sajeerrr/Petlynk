@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9 col-lg-7">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="mb-1">Messages 💬</h2>
+                <p class="text-muted">Chat with your bonded neighbors</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+
+        <div class="v-stack gap-3">
+            {% for bond in accepted_bonds %}
+            <a href="{% url 'chat_room' bond.to_animal.id %}" class="chat-card shadow-sm">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="{{ bond.to_animal.image.url }}" class="chat-img" alt="{{ bond.to_animal.name }}">
+                    <div>
+                        <h5 class="mb-0 fw-bold">{{ bond.to_animal.name }}</h5>
+                        <p class="mb-0 small">
+                            {% if bond.to_animal.is_online %}
+                            <span class="text-success fw-bold"><i class="fa-solid fa-circle shadow-sm"
+                                    style="font-size: 0.6rem;"></i> Active</span>
+                            {% else %}
+                            <span class="text-muted"><i class="fa-regular fa-circle" style="font-size: 0.6rem;"></i>
+                                Offline</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <span class="btn-chat">Open Chat</span>
+            </a>
+            {% empty %}
+            <div class="text-center py-5">
+                <div class="card p-5 border-0 rounded-5 shadow-sm">
+                    <i class="fa-solid fa-comments-slash"
+                        style="font-size: 4rem; color: #eee; margin-bottom: 20px;"></i>
+                    <h4 class="text-muted">No active chats yet...</h4>
+                    <p class="text-muted small">Bond with neighbors to start talking!</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,13 +3,63 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/bonding_animation.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<div class="text-center mb-5">
-    <h2 class="mb-2">Your Matches 🐾</h2>
-    <p class="text-muted">Find your perfect companion today</p>
+<!-- Cinematic Bonding Overlay (Enhanced) -->
+<div id="bonding-overlay" class="bonding-overlay">
+    <div class="bonding-stage">
+        <!-- User's Mini-Card (Left) -->
+        <div id="user-mini-card" class="mini-card left">
+            <img src="{{ profile.image.url }}" alt="My Profile">
+            <h4>{{ profile.name }}</h4>
+            <p>{{ profile.species }}</p>
+        </div>
+
+        <!-- Pop-up Orange Heart (Centerpiece) -->
+        <div id="magic-heart" class="magic-heart">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+
+        <!-- Target's Mini-Card (Right) -->
+        <div id="target-mini-card" class="mini-card right">
+            <img id="target-img" src="" alt="Target Profile">
+            <h4 id="target-name">...</h4>
+            <p id="target-species">...</p>
+        </div>
+
+        <!-- Bottom Success Message -->
+        <div id="bond-success-msg" class="bond-success-msg">
+            <h2>Bond Request Sent! <i class="fa-solid fa-envelope-heart ms-2"></i></h2>
+            <p>Your neighbor will be notified to bond with you.</p>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="d-flex align-items-center gap-3">
+        <img src="{{ profile.image.url }}" class="rounded-circle border border-2 border-white shadow-sm"
+            style="width: 70px; height: 70px; object-fit: cover;" alt="{{ profile.name }}">
+        <div>
+            <h2 class="mb-0">Hi, {{ profile.name }}! 🐾</h2>
+            <p class="text-muted mb-0">Find your perfect companion today</p>
+        </div>
+    </div>
+
+    <!-- Notification Bell (Dashboard Secondary) -->
+    <a href="{% url 'notifications' %}" class="position-relative p-2"
+        style="font-size: 1.5rem; color: var(--primary-orange);">
+        <i class="fa-solid fa-bell"></i>
+        {% if pending_notifications_count > 0 %}
+        <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"
+            style="font-size: 0.6rem;">
+            {{ pending_notifications_count }}
+        </span>
+        {% endif %}
+    </a>
 </div>
 
 <div class="row g-4">
@@ -52,25 +102,75 @@
                         <i class="fa-regular fa-star"></i> {{ animal.favorite_activity }}
                     </p>
 
-                    <form method="post" action="">
-                        {% csrf_token %}
-                        <input type="hidden" name="target" value="{{ animal.id }}">
-                        <button class="action-btn btn-bond">
-                            <i class="fa-solid fa-heart"></i> Bond with {{ animal.name }}
-                        </button>
-                    </form>
+                    <button class="action-btn btn-bond"
+                        onclick="triggerBonding('{{ animal.id }}', '{{ animal.name|escapejs }}', '{{ animal.species|escapejs }}', '{{ animal.image.url|default:'' }}');">
+                        <i class="fa-solid fa-heart"></i> Bond with {{ animal.name }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     {% empty %}
     <div class="col-12 text-center py-5">
-        <div class="card p-5">
-            <h3>No matches found yet 😿</h3>
-            <p>Try updating your preference settings!</p>
+        <div class="card p-5 shadow-sm rounded-5 border-0">
+            <i class="fa-solid fa-cat-space" style="font-size: 4rem; color: #eee; margin-bottom: 20px;"></i>
+            <h3>No neighbors found yet 😿</h3>
+            <p class="text-muted">Expand your horizons or update your traits!</p>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<script>
+    function triggerBonding(targetId, targetName, targetSpecies, targetImg) {
+        const overlay = document.getElementById('bonding-overlay');
+        const userCard = document.getElementById('user-mini-card');
+        const targetCard = document.getElementById('target-mini-card');
+        const magicHeart = document.getElementById('magic-heart');
+        const msg = document.getElementById('bond-success-msg');
+
+        // 1. Setup Target Details
+        document.getElementById('target-name').innerText = targetName;
+        document.getElementById('target-species').innerText = targetSpecies;
+        document.getElementById('target-img').src = targetImg || 'https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=500&q=70';
+
+        // 2. Show Overlay & Play Entrance
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+
+        setTimeout(() => {
+            userCard.classList.add('show');
+            targetCard.classList.add('show');
+        }, 100);
+
+        // 3. Heart Pop & Send Logic
+        fetch("{% url 'send_bond_request' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ "target_id": targetId })
+        }).then(res => res.json()).then(data => {
+            if (data.status === "success") {
+                // Wait for cards to slide in before popping the heart
+                setTimeout(() => {
+                    magicHeart.classList.add('pop');
+                }, 800);
+
+                // Show success message at the bottom
+                setTimeout(() => {
+                    msg.classList.add('show');
+                }, 1800);
+
+                // Smooth exit after viewing
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => location.reload(), 1000);
+                }, 6000);
+            }
+        });
+    }
+</script>
 
 {% endblock %}

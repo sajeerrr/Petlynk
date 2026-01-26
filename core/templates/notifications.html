@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="mb-1">Notifications 💌</h2>
+                <p class="text-muted">Neighbors ready to bond with you</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+
+        <div class="v-stack gap-4">
+            {% for bond in pending_bonds %}
+            <div class="notif-card shadow-sm">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="{{ bond.from_animal.image.url }}" class="notif-img" alt="{{ bond.from_animal.name }}">
+                    <div class="notif-info">
+                        <h5 class="mb-0">{{ bond.from_animal.name }}</h5>
+                        <p class="mb-0">{{ bond.from_animal.species }} &bull; Ready to Bond!</p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    {% if bond.status == 'Accepted' %}
+                    <a href="{% url 'chat_room' bond.from_animal.id %}" class="btn-notif-action btn-accept">
+                        <i class="fa-solid fa-comments"></i> Chat
+                    </a>
+                    {% else %}
+                    <a href="{% url 'accept_bond' bond.id %}" class="btn-notif-action btn-accept">
+                        <i class="fa-solid fa-heart-circle-check"></i> Accept Bond
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-notif-card shadow-sm">
+                <i class="fa-solid fa-envelope-open-text empty-notif-icon"></i>
+                <h4 class="text-muted fw-bold">Your mailbox is empty...</h4>
+                <p class="text-muted small">Bond with more neighbors to fill it up!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/notifications.js' %}"></script>
+{% endblock %}

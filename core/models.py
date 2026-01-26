@@ -68,8 +68,18 @@ class AnimalProfile(models.Model):
     preference = models.CharField(max_length=200)
 
     image = models.ImageField(upload_to='pet_images/', blank=True, null=True)
-
+    last_activity = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_online(self):
+        if not self.last_activity:
+            return False
+        from django.utils import timezone
+        import datetime
+        now = timezone.now()
+        # Active is within last 5 minutes
+        return self.last_activity >= now - datetime.timedelta(minutes=5)
 
 class Bond(models.Model):
     from_animal = models.ForeignKey(
@@ -82,8 +92,36 @@ class Bond(models.Model):
         on_delete=models.CASCADE,
         related_name='received_bonds'
     )
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Declined', 'Declined'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    notified = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.from_animal} → {self.to_animal} ({self.score})"
+        return f"{self.from_animal} → {self.to_animal} ({self.status})"
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        AnimalProfile, 
+        on_delete=models.CASCADE, 
+        related_name='sent_messages'
+    )
+    receiver = models.ForeignKey(
+        AnimalProfile, 
+        on_delete=models.CASCADE, 
+        related_name='received_messages'
+    )
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return f"From {self.sender} to {self.receiver} at {self.timestamp}"

@@ -1,0 +1,240 @@
+/* Cinematic Bonding Overlay - Registration Theme Sync */
+.bonding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: 0.8s ease-in-out;
+}
+
+/* The Signature Orange Blob from Reg Theme */
+.bonding-overlay::before {
+    content: "";
+    position: absolute;
+    height: 1800px;
+    width: 1800px;
+    top: -10%;
+    right: 48%;
+    transform: translateY(-50%) rotate(-10deg);
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    z-index: 1;
+    transition: 1.8s ease-in-out;
+    opacity: 0.9;
+}
+
+.bonding-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    height: 80vh;
+    /* Controlled height to keep elements grouped */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+/* Mini-Cards */
+.mini-card {
+    width: 320px;
+    background: #fff;
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 1px solid #eee;
+    transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.mini-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.mini-card h4 {
+    color: #333;
+    font-weight: 800;
+    font-size: 1.4rem;
+    /* Smaller */
+    margin-bottom: 5px;
+}
+
+.mini-card p {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    /* Smaller */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Entrance Animations */
+.mini-card.left {
+    transform: translateX(-140%) scale(0.9);
+    opacity: 0;
+}
+
+.mini-card.right {
+    transform: translateX(140%) scale(0.9);
+    opacity: 0;
+}
+
+.mini-card.show {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+}
+
+/* The Pulsing Brand Heart */
+.magic-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 8rem;
+    /* Scaled down */
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 30px rgba(255, 75, 31, 0.3));
+    z-index: 100;
+    opacity: 0;
+    transition: 0.8s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.magic-heart.pop {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: heartBeat 1.5s infinite ease-in-out;
+}
+
+@keyframes heartBeat {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Success Message - Positioned at Bottom and Smaller */
+.bond-success-msg {
+    position: absolute;
+    bottom: -100px;
+    /* Hidden state */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+    transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 20;
+}
+
+.bond-success-msg.show {
+    bottom: 10px;
+    /* Strictly at the very bottom */
+    opacity: 1;
+}
+
+.bond-success-msg h2 {
+    font-size: 1.8rem;
+    /* Much smaller */
+    font-weight: 800;
+    margin-bottom: 4px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bond-success-msg p {
+    color: var(--text-muted) !important;
+    font-size: 1rem;
+    /* Smaller */
+    font-weight: 600;
+}
+
+/* ================================
+   Mobile Support
+   ================================ */
+
+@media (max-width: 768px) {
+    .bonding-stage {
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        height: 100vh;
+        padding-bottom: 80px;
+        /* Space for message */
+    }
+
+    .mini-card {
+        width: 140px;
+        /* Significantly smaller for vertical stack */
+        padding: 10px;
+        border-radius: 20px;
+    }
+
+    .mini-card img {
+        height: 100px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .mini-card h4 {
+        font-size: 1rem;
+    }
+
+    .mini-card p {
+        font-size: 0.7rem;
+    }
+
+    .magic-heart {
+        font-size: 5rem;
+        z-index: 100;
+    }
+
+    /* Entrance Overrides for Mobile (Vertical) */
+    .mini-card.left {
+        transform: translateY(-100px);
+    }
+
+    .mini-card.right {
+        transform: translateY(100px);
+    }
+
+    .mini-card.show {
+        transform: translateY(0) scale(1);
+    }
+
+    .bond-success-msg.show {
+        bottom: 15px;
+    }
+
+    .bond-success-msg h2 {
+        font-size: 1.4rem;
+    }
+
+    .bond-success-msg p {
+        font-size: 0.85rem;
+    }
+}

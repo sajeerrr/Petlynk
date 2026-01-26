@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ns2$dhl2=47d!@b7kke*%c3%@68-tr5xgx78&cejm=gog$q57x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.PresenceMiddleware',
 ]
 
 ROOT_URLCONF = 'petlynk.urls'
@@ -62,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.notification_counts',
             ],
         },
     },

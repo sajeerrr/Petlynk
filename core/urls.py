@@ -9,4 +9,10 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
     path('reset-password/<str:username>/', views.reset_password, name='reset_password'),
+    path('notifications/', views.notifications_view, name='notifications'),
+    path('send-bond-request/', views.send_bond_request, name='send_bond_request'),
+    path('accept-bond/<int:bond_id>/', views.accept_bond, name='accept_bond'),
+    path('chats/', views.chat_list, name='chat_list'),
+    path('chat/<int:profile_id>/', views.chat_room, name='chat_room'),
+    path('send-message/<int:profile_id>/', views.send_message, name='send_message'),
 ]
