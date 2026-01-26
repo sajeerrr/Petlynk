@@ -543,7 +543,8 @@ input:-webkit-autofill:active {
     }
 
     .right-panel .content {
-        transform: translateY(300px);
+        transform: translateY(250px);
+        /* Move Sign In button higher while keeping it visible */
     }
 }
 
