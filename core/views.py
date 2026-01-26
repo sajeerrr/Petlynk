@@ -270,6 +270,7 @@ def send_message(request, profile_id):
     if request.method == "POST":
         import json
         from django.http import JsonResponse
+        from django.db.models import Q
         data = json.loads(request.body)
         content = data.get("content")
         
@@ -280,8 +281,13 @@ def send_message(request, profile_id):
             my_profile = AnimalProfile.objects.get(user=request.user)
             other_profile = AnimalProfile.objects.get(id=profile_id)
             
-            # Verify bond
-            if not Bond.objects.filter(from_animal=my_profile, to_animal=other_profile, status='Accepted').exists():
+            # Verify bond in BOTH directions (bidirectional check)
+            bond_exists = Bond.objects.filter(
+                Q(from_animal=my_profile, to_animal=other_profile, status='Accepted') |
+                Q(from_animal=other_profile, to_animal=my_profile, status='Accepted')
+            ).exists()
+            
+            if not bond_exists:
                 return JsonResponse({"status": "error", "message": "Bond not accepted"})
 
             msg = Message.objects.create(
@@ -299,6 +305,43 @@ def send_message(request, profile_id):
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
 
+    return JsonResponse({"status": "error", "message": "Method not allowed"})
+
+@login_required
+def get_new_messages(request, profile_id):
+    """API endpoint to fetch new messages for real-time updates"""
+    if request.method == "GET":
+        from django.http import JsonResponse
+        from django.db.models import Q
+        
+        try:
+            my_profile = AnimalProfile.objects.get(user=request.user)
+            other_profile = AnimalProfile.objects.get(id=profile_id)
+            last_msg_id = request.GET.get('last_msg_id', 0)
+            
+            # Fetch messages between these two profiles that are newer than last_msg_id
+            new_messages = Message.objects.filter(
+                Q(sender=my_profile, receiver=other_profile) |
+                Q(sender=other_profile, receiver=my_profile),
+                id__gt=last_msg_id
+            ).order_by('timestamp')
+            
+            messages_data = []
+            for msg in new_messages:
+                messages_data.append({
+                    'id': msg.id,
+                    'content': msg.content,
+                    'timestamp': msg.timestamp.strftime("%I:%M %p"),
+                    'is_mine': msg.sender == my_profile
+                })
+            
+            return JsonResponse({
+                "status": "success",
+                "messages": messages_data
+            })
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
+    
     return JsonResponse({"status": "error", "message": "Method not allowed"})
 
 

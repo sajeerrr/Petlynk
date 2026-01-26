@@ -15,4 +15,5 @@ urlpatterns = [
     path('chats/', views.chat_list, name='chat_list'),
     path('chat/<int:profile_id>/', views.chat_room, name='chat_room'),
     path('send-message/<int:profile_id>/', views.send_message, name='send_message'),
+    path('get-new-messages/<int:profile_id>/', views.get_new_messages, name='get_new_messages'),
 ]

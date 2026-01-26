@@ -5,8 +5,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!container) return;
 
-    // Auto-scroll to bottom
-    container.scrollTop = container.scrollHeight;
+    let lastMessageId = 0;
+    let isPolling = false;
+
+    // Get the last message ID from existing messages
+    const existingMessages = container.querySelectorAll('.message');
+    if (existingMessages.length > 0) {
+        const lastMsg = existingMessages[existingMessages.length - 1];
+        lastMessageId = parseInt(lastMsg.dataset.msgId || '0') || 0;
+    }
+
+    // Auto-scroll to bottom on page load
+    function scrollToBottom() {
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    }
+
+    scrollToBottom();
+
+    // Poll for new messages every 3 seconds
+    function pollNewMessages() {
+        if (isPolling) return;
+        isPolling = true;
+        const profileId = input.dataset.profileId;
+        const pollUrl = `/get-new-messages/${profileId}/?last_msg_id=${lastMessageId}`;
+        fetch(pollUrl).then(res => res.json()).then(data => {
+            if (data.status === 'success' && data.messages && data.messages.length > 0) {
+                data.messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = msg.is_mine ? 'message sent' : 'message received';
+                    msgDiv.dataset.msgId = msg.id;
+                    msgDiv.innerHTML = `${msg.content}<span class="msg-time">${msg.timestamp}</span>`;
+                    container.appendChild(msgDiv);
+                    lastMessageId = Math.max(lastMessageId, msg.id);
+                });
+                scrollToBottom();
+            }
+        }).catch(err => console.error('Polling error:', err)).finally(() => { isPolling = false; });
+    }
+    setInterval(pollNewMessages, 3000);
 
     function sendMessage() {
         const text = input.value.trim();
@@ -30,10 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === "success") {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'message sent';
+                msgDiv.dataset.msgId = data.msg_id;
                 msgDiv.innerHTML = `${data.content}<span class="msg-time">${data.timestamp}</span>`;
                 container.appendChild(msgDiv);
-                container.scrollTop = container.scrollHeight;
+                lastMessageId = Math.max(lastMessageId, data.msg_id);
+                scrollToBottom();
+            } else {
+                console.error('Failed to send message:', data.message);
+                alert('Failed to send message: ' + data.message);
             }
+        }).catch(err => {
+            console.error('Error sending message:', err);
+            alert('Error sending message. Please try again.');
         });
     }
 

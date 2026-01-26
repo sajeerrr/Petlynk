@@ -409,35 +409,44 @@ input:-webkit-autofill:active {
 
 @media (max-width: 870px) {
     .auth-container {
-        min-height: 800px;
+        min-height: 100vh;
         height: 100vh;
         overflow: hidden !important;
-        /* Disable scroll as requested */
+        /* Strictly no scroll */
     }
 
     .auth-brand {
         font-size: 1.1rem;
-        top: 10px;
-        left: 15px !important;
+        top: 20px;
+        left: 20px !important;
         z-index: 200;
     }
 
     .top-right-brand {
         right: auto !important;
-        left: 15px !important;
+        left: 20px !important;
     }
 
     .signin-signup {
         width: 100%;
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
-        left: 50%;
+        left: 50% !important;
+        /* Force center on mobile */
         z-index: 100;
     }
 
     .auth-container.sign-up-mode .signin-signup {
         top: 50% !important;
+        left: 50% !important;
+        /* Force center in Sign-Up mode too */
         transform: translate(-50%, -50%) !important;
+    }
+
+    form {
+        padding: 0 2rem !important;
+        /* Reduce padding to ensure elements fit and center */
+        align-items: center !important;
     }
 
     .panels-container {
@@ -451,7 +460,7 @@ input:-webkit-autofill:active {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 1.5rem 8%;
+        padding: 0 8% !important;
         grid-column: 1 / 2;
         z-index: 20;
     }
@@ -469,7 +478,7 @@ input:-webkit-autofill:active {
     }
 
     .panel .content {
-        padding: 40px 0 0 0;
+        padding: 0 !important;
         transition: transform 0.9s ease-in-out;
         transition-delay: 0.8s;
         text-align: center;
@@ -477,7 +486,8 @@ input:-webkit-autofill:active {
     }
 
     .panel h3 {
-        font-size: 1rem;
+        font-size: 1.3rem;
+        margin-bottom: 5px;
     }
 
     .panel p {
@@ -486,31 +496,42 @@ input:-webkit-autofill:active {
     }
 
     .btn.transparent {
-        width: 140px;
-        height: 40px;
-        font-size: 0.9rem;
-        background: rgba(255, 255, 255, 0.1);
+        width: 160px;
+        height: 45px;
+        font-size: 1rem;
+        font-weight: 800;
+        background: rgba(255, 255, 255, 0.2);
         border: 2px solid #fff;
+        margin-top: 10px;
     }
 
+    /* MASSIVE BLOB POSITIONING TO COVER BUTTONS */
+    /* BLOBS: REFINED TO ONLY COVER TEXT PANELS AS IN DESKTOP */
     .auth-container:before {
         width: 1500px;
         height: 1500px;
-        transform: translateX(-50%);
         left: 50%;
-        bottom: 60%;
-        /* Moved down from 70% to reveal button */
-        right: initial;
-        top: initial;
-        transition: 2s ease-in-out;
+        top: -1150px;
+        /* Covers exactly the TOP toggle panel in Sign-In mode */
+        transform: translateX(-50%);
+        bottom: auto;
+        right: auto;
+        transition: 1.8s ease-in-out;
         z-index: 5;
+        background: var(--primary-gradient) !important;
+        /* STRICTLY NO PET IMAGES ON MOBILE */
+    }
+
+    /* Catch-all to remove any remaining images */
+    .auth-container img,
+    .image {
+        display: none !important;
     }
 
     .auth-container.sign-up-mode:before {
-        transform: translate(-50%, 100%);
-        bottom: 40%;
-        /* Moved up from 30% to reveal button */
-        right: initial;
+        top: 450px;
+        /* Slides down to cover exactly the BOTTOM toggle panel in Sign-Up mode */
+        transform: translateX(-50%);
     }
 
     .auth-container.sign-up-mode .left-panel .content {
