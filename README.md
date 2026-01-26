@@ -66,6 +66,7 @@ IMPLEMENTED FEATURES
    - Chat unlocked after mutual bonding
    - Message timestamps
    - Online/active status indicator
+   - Auto Refresh
 
 6. Match Dashboard
    - View all recommended matches
