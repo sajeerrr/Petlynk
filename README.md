@@ -141,7 +141,6 @@ ASSUMPTIONS, LIMITATIONS & KNOWN ISSUES
 ---------------------------------------
 
 - Internet connection required
-- Basic matchmaking logic (not AI/ML based)
 - SQLite suitable only for development
 - Limited scalability on free hosting tier
 - No push notifications in current version
