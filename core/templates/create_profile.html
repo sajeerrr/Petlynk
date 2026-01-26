@@ -112,93 +112,69 @@
                 <hr class="my-5 opacity-10">
                 <h5 class="mb-4 fw-bold" style="color: #ff4b1f;">Lifestyle & Matching 🐾</h5>
 
-                <!-- Habitat Section -->
+                <!-- Habitat -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Favorite Habitat</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.habitat %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <div id="other-habitat-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-habitat-input" class="form-control"
-                            placeholder="Describe your habitat...">
-                    </div>
                 </div>
 
-                <!-- Territory Section -->
+                <!-- Territory -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Home Territory</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.territory %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <div id="other-territory-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-territory-input" class="form-control"
-                            placeholder="Describe your territory...">
-                    </div>
                 </div>
 
-                <!-- Personality Section -->
+                <!-- Personality -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Personality</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.personality %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <div id="other-personality-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-personality-input" class="form-control"
-                            placeholder="Describe yourself...">
-                    </div>
                 </div>
 
-                <!-- Diet Section -->
+                <!-- Diet -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">My Diet Style</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.diet %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <div id="other-diet-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-diet-input" class="form-control"
-                            placeholder="Special diet needs?">
-                    </div>
                 </div>
 
-                <!-- Favorite Activity Section -->
+                <!-- Favorite Activity -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">Favorite Activity</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.favorite_activity %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
                     </div>
-                    <div id="other-favorite_activity-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-favorite_activity-input" class="form-control"
-                            placeholder="Tell us your special activity...">
-                    </div>
                 </div>
 
-                <!-- Preference Section -->
+                <!-- Preference -->
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-uppercase text-muted mb-2">What I Look For</label>
-                    <div class="chip-group mb-2">
+                    <div class="chip-group">
                         {% for choice in form.preference %}
                         {{ choice.tag }}
                         <label for="{{ choice.id_for_label }}" class="chip">{{ choice.choice_label }}</label>
                         {% endfor %}
-                    </div>
-                    <div id="other-preference-container" class="mt-2" style="display: none;">
-                        <input type="text" id="custom-preference-input" class="form-control"
-                            placeholder="Describe your perfect match...">
                     </div>
                 </div>
 
