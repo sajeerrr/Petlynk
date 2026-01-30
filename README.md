@@ -135,7 +135,7 @@ SETUP AND EXECUTION INSTRUCTIONS
    python manage.py runserver
 
 7. Access application
-   http://petlynk.webs.vc
+   http://localhost:8000/
 
 
 ASSUMPTIONS, LIMITATIONS & KNOWN ISSUES
